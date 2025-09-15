@@ -5,14 +5,14 @@ import { StatusBar } from 'expo-status-bar';
 export default function Frontpage({ onNavigate = () => {} }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Forside</Text>
+      <Text style={styles.title}>DBF</Text>
 
       <TouchableOpacity style={styles.button} onPress={() => onNavigate('klub')}>
-        <Text style={styles.buttonText}>Gå til Klub</Text>
+        <Text style={styles.buttonText}>Se Klubber</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button} onPress={() => onNavigate('medlem')}>
-        <Text style={styles.buttonText}>Gå til Medlem</Text>
+        <Text style={styles.buttonText}>Gå til Medlem og medlemskaber</Text>
       </TouchableOpacity>
 
       <StatusBar style="auto" />
