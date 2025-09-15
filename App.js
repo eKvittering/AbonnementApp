@@ -1,21 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import React, { useState } from 'react';
+
+
+import Frontpage from './frontpage';
+import Klub from './klub';
+import Medlem from './medlem';
+
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <Text>INIT COMMIT TEXT</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+const [screen, setScreen] = useState('frontpage');
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+if (screen === 'klub') return <Klub onBack={() => setScreen('frontpage')} />;
+if (screen === 'medlem') return <Medlem onBack={() => setScreen('frontpage')} />;
+
+return <Frontpage onNavigate={setScreen} />;
+}
