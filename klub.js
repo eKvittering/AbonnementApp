@@ -15,8 +15,7 @@ import {
 } from 'react-native';
 
 
-export const API_BASE = "http://192.168.203.248:8080";
-
+export const API_BASE = "http://10.136.130.188:8080";
 const API_URL = `${API_BASE}/api/klub`;
 
 export default class Klub extends Component {
