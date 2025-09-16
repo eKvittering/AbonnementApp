@@ -6,7 +6,6 @@ import {
 export const API_BASE = "http://10.136.130.188:8080";
 const API_URL = `${API_BASE}/api/medlemskaber`;
 
-// parse Danish/text statuses to integer
 function getMedlemsstatusAsInteger(value) {
   if (value === null || value === undefined) return NaN;
   if (typeof value === 'number' && Number.isInteger(value)) return value;
@@ -90,7 +89,6 @@ export default function Medlemskab({ medlem, onBack = () => {} }) {
         // try next
       }
     }
-    // fallback generic list then client filter
     try {
       const res = await fetch(API_URL);
       if (res.ok) {
@@ -216,13 +214,13 @@ export default function Medlemskab({ medlem, onBack = () => {} }) {
       <View style={styles.row}>
         <View style={{ flex: 1 }}>
           <Text style={styles.title}>{klubLabel}</Text>
-          <Text>Status: {String(item.medlemsstatus)}</Text>
-          <Text>Primær: {primary} • Start: {item.startdato ?? ''} • Slut: {item.slutdato ?? ''}</Text>
-          <Text>Pris: {item.pris ?? ''} • Saldo: {item.saldo ?? ''}</Text>
+          <Text style={styles.meta}>Status: {String(item.medlemsstatus)}</Text>
+          <Text style={styles.meta}>Primær: {primary} • Start: {item.startdato ?? ''} • Slut: {item.slutdato ?? ''}</Text>
+          <Text style={styles.meta}>Pris: {item.pris ?? ''} • Saldo: {item.saldo ?? ''}</Text>
         </View>
         <View style={styles.actions}>
-          <TouchableOpacity style={styles.smallBtn} onPress={() => openEdit(item)}><Text style={styles.btnText}>Rediger</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.smallBtn, styles.deleteBtn]} onPress={() => confirmDelete(item)}><Text style={styles.btnText}>Slet</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.smallBtn} onPress={() => openEdit(item)}><Text style={styles.smallBtnText}>Rediger</Text></TouchableOpacity>
+          <TouchableOpacity style={[styles.smallBtn, styles.deleteBtn]} onPress={() => confirmDelete(item)}><Text style={styles.smallBtnText}>Slet</Text></TouchableOpacity>
         </View>
       </View>
     );
@@ -231,7 +229,7 @@ export default function Medlemskab({ medlem, onBack = () => {} }) {
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={onBack}><Text style={styles.back}>Tilbage</Text></TouchableOpacity>
+        <TouchableOpacity onPress={onBack}><Text style={styles.back}>← Tilbage</Text></TouchableOpacity>
         <Text style={styles.headerTitle}>Medlemskaber — {medlem?.fornavn ?? ''} {medlem?.efternavn ?? ''}</Text>
         <View style={{ width: 60 }} />
       </View>
@@ -239,23 +237,23 @@ export default function Medlemskab({ medlem, onBack = () => {} }) {
       <View style={styles.container}>
         <Text style={styles.status}>{status}</Text>
 
-        <TouchableOpacity style={styles.createBtn} onPress={() => { resetForm(); setCreateVisible(true); }}>
-          <Text style={styles.createBtnText}>Opret Medlemskab</Text>
+        <TouchableOpacity style={[styles.button, { alignSelf: 'flex-start', marginBottom: 8 }]} onPress={() => { resetForm(); setCreateVisible(true); }}>
+          <Text style={styles.buttonText}>Opret Medlemskab</Text>
         </TouchableOpacity>
 
         <FlatList
           data={list}
           keyExtractor={(i) => String(i.id)}
           renderItem={renderItem}
-          ListEmptyComponent={<Text style={{ padding: 12 }}>Ingen medlemskaber fundet.</Text>}
+          ListEmptyComponent={<Text style={{ padding: 12, color: '#9fb7bd' }}>Ingen medlemskaber fundet.</Text>}
           contentContainerStyle={{ paddingBottom: 120 }}
         />
       </View>
 
       <Modal visible={createVisible} animationType="slide" transparent>
-        <View style={styles.modalWrap}>
-          <View style={styles.modalCard}>
-            <ScrollView>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <ScrollView keyboardShouldPersistTaps="handled">
               <Text style={styles.modalTitle}>Opret Medlemskab</Text>
               <TextInput placeholder="Klub (nummer)" style={styles.input} value={form.klub} onChangeText={(t) => setForm({ ...form, klub: t })} keyboardType="numeric" />
               <TextInput placeholder="Medlemsstatus" style={styles.input} value={form.medlemsstatus} onChangeText={(t) => setForm({ ...form, medlemsstatus: t })} />
@@ -266,12 +264,12 @@ export default function Medlemskab({ medlem, onBack = () => {} }) {
                 <TouchableOpacity onPress={() => setForm({ ...form, primaryKlub: !form.primaryKlub })} style={[styles.checkbox, form.primaryKlub && styles.checkboxChecked]}>
                   <Text>{form.primaryKlub ? '✓' : ''}</Text>
                 </TouchableOpacity>
-                <Text style={{ marginLeft: 8 }}>Primærklub</Text>
+                <Text style={{ marginLeft: 8, color: '#062e35' }}>Primærklub</Text>
               </View>
 
-              <View style={styles.modalActions}>
-                <TouchableOpacity style={styles.saveBtn} onPress={createMedlemskab}><Text style={styles.btnText}>Gem</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.cancelBtn} onPress={() => setCreateVisible(false)}><Text>Annuler</Text></TouchableOpacity>
+              <View style={styles.modalButtons}>
+                <TouchableOpacity style={styles.button} onPress={createMedlemskab}><Text style={styles.buttonText}>Gem</Text></TouchableOpacity>
+                <TouchableOpacity style={[styles.button, { backgroundColor: '#6c757d' }]} onPress={() => setCreateVisible(false)}><Text style={styles.buttonText}>Luk</Text></TouchableOpacity>
               </View>
             </ScrollView>
           </View>
@@ -279,9 +277,9 @@ export default function Medlemskab({ medlem, onBack = () => {} }) {
       </Modal>
 
       <Modal visible={editVisible} animationType="slide" transparent>
-        <View style={styles.modalWrap}>
-          <View style={styles.modalCard}>
-            <ScrollView>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <ScrollView keyboardShouldPersistTaps="handled">
               <Text style={styles.modalTitle}>Rediger Medlemskab</Text>
               <TextInput placeholder="Klub (nummer)" style={styles.input} value={form.klub} onChangeText={(t) => setForm({ ...form, klub: t })} keyboardType="numeric" />
               <TextInput placeholder="Medlemsstatus" style={styles.input} value={form.medlemsstatus} onChangeText={(t) => setForm({ ...form, medlemsstatus: t })} />
@@ -292,13 +290,13 @@ export default function Medlemskab({ medlem, onBack = () => {} }) {
                 <TouchableOpacity onPress={() => setForm({ ...form, primaryKlub: !form.primaryKlub })} style={[styles.checkbox, form.primaryKlub && styles.checkboxChecked]}>
                   <Text>{form.primaryKlub ? '✓' : ''}</Text>
                 </TouchableOpacity>
-                <Text style={{ marginLeft: 8 }}>Primærklub</Text>
+                <Text style={{ marginLeft: 8, color: '#062e35' }}>Primærklub</Text>
               </View>
 
-              <View style={styles.modalActions}>
-                <TouchableOpacity style={styles.saveBtn} onPress={saveEdit}><Text style={styles.btnText}>Gem ændringer</Text></TouchableOpacity>
-                <TouchableOpacity style={[styles.saveBtn, styles.deleteBtn]} onPress={() => { if (editItem) confirmDelete(editItem); setEditVisible(false); }}><Text style={styles.btnText}>Slet</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.cancelBtn} onPress={() => setEditVisible(false)}><Text>Annuler</Text></TouchableOpacity>
+              <View style={styles.modalButtons}>
+                <TouchableOpacity style={styles.button} onPress={saveEdit}><Text style={styles.buttonText}>Gem ændringer</Text></TouchableOpacity>
+                <TouchableOpacity style={[styles.button, { backgroundColor: '#d9534f' }]} onPress={() => { if (editItem) confirmDelete(editItem); setEditVisible(false); }}><Text style={styles.buttonText}>Slet</Text></TouchableOpacity>
+                <TouchableOpacity style={[styles.button, { backgroundColor: '#6c757d' }]} onPress={() => setEditVisible(false)}><Text style={styles.buttonText}>Luk</Text></TouchableOpacity>
               </View>
             </ScrollView>
           </View>
@@ -309,28 +307,32 @@ export default function Medlemskab({ medlem, onBack = () => {} }) {
 }
 
 const styles = StyleSheet.create({
-  header: { height: 56, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 12, borderBottomWidth: 1, borderBottomColor: '#eee' },
-  back: { color: '#007AFF' },
-  headerTitle: { fontSize: 16, fontWeight: '600' },
-  container: { flex: 1, padding: 12 },
-  status: { marginBottom: 8, color: '#444' },
-  createBtn: { backgroundColor: '#007AFF', padding: 10, borderRadius: 6, alignSelf: 'flex-start', marginBottom: 8 },
-  createBtnText: { color: '#fff' },
-  row: { flexDirection: 'row', padding: 12, marginVertical: 6, backgroundColor: '#fff', borderRadius: 8, alignItems: 'center' },
-  title: { fontWeight: '700', marginBottom: 4 },
-  actions: { justifyContent: 'space-between' },
-  smallBtn: { backgroundColor: '#007AFF', padding: 8, borderRadius: 6, marginVertical: 4 },
-  deleteBtn: { backgroundColor: '#D9534F' },
-  btnText: { color: '#fff' },
+  header: { height: 56, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 12 },
+  back: { color: '#06b6d4' },
+  headerTitle: { fontSize: 16, fontWeight: '700', color: '#e6f6f8' },
+  container: { flex: 1, padding: 12, backgroundColor: '#0b1220' },
+  status: { marginBottom: 8, color: '#9fb7bd' },
 
-  modalWrap: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' },
-  modalCard: { width: '92%', maxHeight: '90%', backgroundColor: '#fff', borderRadius: 8, padding: 12 },
-  modalTitle: { fontSize: 18, fontWeight: '700', marginBottom: 8 },
-  input: { backgroundColor: '#f5f5f5', padding: 8, borderRadius: 6, marginVertical: 6 },
+  row: { flexDirection: 'row', padding: 12, marginVertical: 6, backgroundColor: '#0f172a', borderRadius: 10, alignItems: 'center' },
+  title: { fontWeight: '700', marginBottom: 4, color: '#e6f6f8' },
+  meta: { color: '#9fb7bd', fontSize: 12 },
+
+  actions: { justifyContent: 'space-between' },
+  smallBtn: { backgroundColor: '#06b6d4', paddingVertical: 8, paddingHorizontal: 10, borderRadius: 8, marginVertical: 4 },
+  smallBtnText: { color: '#062e35', fontWeight: '700', fontSize: 12 },
+  deleteBtn: { backgroundColor: '#d9534f' },
+
+  // modal styles aligned with klub/medlem popup
+  modalContainer: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', padding: 16 },
+  modalContent: { backgroundColor: '#fff', borderRadius: 12, padding: 14, maxHeight: '90%' },
+  modalTitle: { fontSize: 18, fontWeight: '700', marginBottom: 8, color: '#062e35' },
+  modalButtons: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
+
+  input: { backgroundColor: '#f5f5f5', padding: 10, borderRadius: 8, marginVertical: 6 },
   checkboxRow: { flexDirection: 'row', alignItems: 'center', marginTop: 8 },
   checkbox: { width: 28, height: 28, borderWidth: 1, borderColor: '#ccc', alignItems: 'center', justifyContent: 'center', borderRadius: 4 },
-  checkboxChecked: { backgroundColor: '#007AFF', borderColor: '#007AFF' },
-  modalActions: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
-  saveBtn: { backgroundColor: '#007AFF', padding: 10, borderRadius: 6 },
-  cancelBtn: { backgroundColor: '#eee', padding: 10, borderRadius: 6 }
+  checkboxChecked: { backgroundColor: '#06b6d4', borderColor: '#06b6d4' },
+
+  button: { backgroundColor: '#06b6d4', padding: 10, borderRadius: 10, alignItems: 'center', marginRight: 8, flex: 1 },
+  buttonText: { color: '#062e35', fontWeight: '700' }
 });

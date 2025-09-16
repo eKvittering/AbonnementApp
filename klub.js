@@ -408,41 +408,55 @@ export default class Klub extends Component {
   }
 }
 
+
+
+
+// ...existing code...
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingTop: 8, backgroundColor: '#fff' },
-  header: { flexDirection: 'row', alignItems: 'center', marginBottom: 8, paddingHorizontal: 12 },
+  container: { flex: 1, paddingTop: 12, backgroundColor: '#0b1220' },
+  header: { flexDirection: 'row', alignItems: 'center', marginBottom: 8, paddingHorizontal: 12, paddingVertical: 8, backgroundColor: 'transparent' },
   backBtn: { padding: 6 },
-  backText: { color: '#007AFF', fontSize: 16 },
-  title: { fontSize: 20, fontWeight: '600', marginLeft: 8 },
+  backText: { color: '#06b6d4', fontSize: 16 },
+  title: { fontSize: 20, fontWeight: '700', marginLeft: 8, color: '#e6f6f8' },
+
   searchSection: { paddingHorizontal: 12, paddingBottom: 8 },
-  form: { flex: 1 },
-  label: { fontSize: 16, fontWeight: '600', marginVertical: 8 },
+  label: { fontSize: 16, fontWeight: '600', marginVertical: 8, color: '#cfeff2' },
   row: { flexDirection: 'row', justifyContent: 'space-between', gap: 8, marginBottom: 8 },
+
   input: {
     flex: 1,
+    backgroundColor: '#ffffff',
+    color: '#000000',
     borderWidth: 1,
-    borderColor: '#ddd',
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 6,
-    marginBottom: 6,
+    borderColor: '#e0e0e0',
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    borderRadius: 10,
+    marginBottom: 8,
     marginRight: 8,
   },
+
   buttonGroup: { flexDirection: 'row', justifyContent: 'space-between', marginVertical: 8 },
-  button: { backgroundColor: '#007AFF', padding: 10, borderRadius: 6, alignItems: 'center', marginRight: 8 },
-  buttonText: { color: '#fff' },
-  status: { marginTop: 6, color: '#666', paddingHorizontal: 12 },
-  clubRow: { flexDirection: 'row', padding: 10, borderBottomWidth: 1, borderColor: '#eee', alignItems: 'center', paddingHorizontal: 12 },
-  clubTitle: { fontSize: 16, fontWeight: '600' },
-  clubMeta: { color: '#666', fontSize: 12 },
+  button: { backgroundColor: '#06b6d4', padding: 10, borderRadius: 10, alignItems: 'center', marginRight: 8 },
+  buttonText: { color: '#062e35', fontWeight: '700' },
+
+  status: { marginTop: 6, color: '#9fb7bd', paddingHorizontal: 12 },
+
+  clubRow: { flexDirection: 'row', padding: 12, marginHorizontal: 12, marginVertical: 6, backgroundColor: '#0f172a', borderRadius: 10, alignItems: 'center' },
+  clubTitle: { fontSize: 16, fontWeight: '700', color: '#e6f6f8' },
+  clubMeta: { color: '#9fb7bd', fontSize: 12 },
+
   rowButtons: { flexDirection: 'column', marginLeft: 8 },
-  smallBtn: { backgroundColor: '#0a84ff', paddingVertical: 6, paddingHorizontal: 8, borderRadius: 4, marginBottom: 6 },
-  smallBtnText: { color: '#fff', fontSize: 12 },
-  modalContainer: { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', padding: 16 },
-  modalContent: { backgroundColor: '#fff', borderRadius: 8, padding: 12, maxHeight: '90%' },
-  modalTitle: { fontSize: 18, fontWeight: '700', marginBottom: 8 },
+  smallBtn: { backgroundColor: '#06b6d4', paddingVertical: 6, paddingHorizontal: 10, borderRadius: 8, marginBottom: 6 },
+  smallBtnText: { color: '#062e35', fontSize: 12, fontWeight: '700' },
+
+  modalContainer: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', padding: 16 },
+  modalContent: { backgroundColor: '#fff', borderRadius: 12, padding: 14, maxHeight: '90%' },
+  modalTitle: { fontSize: 18, fontWeight: '700', marginBottom: 8, color: '#062e35' },
   modalButtons: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
-  memberRow: { padding: 10, borderBottomWidth: 1, borderColor: '#f0f0f0' },
-  memberText: { fontWeight: '600' },
-  memberMeta: { color: '#666', fontSize: 12 },
+
+  memberRow: { padding: 12, borderBottomWidth: 1, borderColor: '#0e2230', backgroundColor: '#071014' },
+  memberText: { fontWeight: '600', color: '#e6f6f8' },
+  memberMeta: { color: '#9fb7bd', fontSize: 12 },
 });
+// ...existing code...

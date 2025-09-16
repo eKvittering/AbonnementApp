@@ -7,7 +7,7 @@ import Medlemskab from './medlemskab';
 export const API_BASE = "http://10.136.130.188:8080";
 const API_URL = `${API_BASE}/api/medlemmer`;
 
-export default function Medlem() {
+export default function Medlem({ onBack = () => {} }) {
   const [filters, setFilters] = useState({
     medlemsnummer: '', fornavn: '', efternavn: '', adresse: '',
     postnummer: '', email: '', fodselsdato: '', mobiltelefon: '', nuvhac: ''
@@ -31,6 +31,7 @@ export default function Medlem() {
     const d = String(s).replace(/\D/g, '');
     return d.replace(/(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4');
   }
+
   function formatDate(s){
     if (!s) return '';
     const d = new Date(s);
@@ -133,7 +134,14 @@ export default function Medlem() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Medlemmer</Text>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.headerBack} onPress={onBack}>
+          <Text style={styles.backText}>← Tilbage</Text>
+        </TouchableOpacity>
+        <Text style={styles.title}>Medlemmer</Text>
+        <View style={{ width: 56 }} />
+      </View>
+
       <ScrollView style={styles.filters} keyboardShouldPersistTaps="handled">
         <View style={styles.rowInput}>
           <TextInput placeholder="Medlemsnummer" style={styles.input} value={filters.medlemsnummer}
@@ -182,10 +190,10 @@ export default function Medlem() {
         </View>
       </Modal>
 
-      <Modal visible={editModalVisible} transparent animationType="fade">
-        <View style={styles.modalWrap}>
-          <View style={styles.modalCard}>
-            <ScrollView>
+      <Modal visible={editModalVisible} animationType="slide" transparent>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <ScrollView keyboardShouldPersistTaps="handled">
               <Text style={styles.modalTitle}>Rediger Medlem</Text>
               {editMedlem && (
                 <>
@@ -208,10 +216,18 @@ export default function Medlem() {
                     onChangeText={(t)=>setEditMedlem({...editMedlem, nuvhac: t})} keyboardType="numeric" />
                 </>
               )}
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 }}>
-                <TouchableOpacity style={styles.saveBtn} onPress={saveEditMedlem}><Text style={{color:'#fff'}}>Gem</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.deleteBtn} onPress={deleteMedlem}><Text style={{color:'#fff'}}>Slet</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.cancelBtn} onPress={()=>setEditModalVisible(false)}><Text>Annuler</Text></TouchableOpacity>
+              <View style={styles.modalButtons}>
+                <TouchableOpacity style={styles.button} onPress={saveEditMedlem}>
+                  <Text style={styles.buttonText}>Gem</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={[styles.button, { backgroundColor: '#d9534f' }]} onPress={deleteMedlem}>
+                  <Text style={styles.buttonText}>Slet</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={[styles.button, { backgroundColor: '#6c757d' }]} onPress={()=>setEditModalVisible(false)}>
+                  <Text style={styles.buttonText}>Luk</Text>
+                </TouchableOpacity>
               </View>
             </ScrollView>
           </View>
@@ -222,24 +238,40 @@ export default function Medlem() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingTop: 36, alignItems: 'center', backgroundColor: '#f8f8f8' },
-  title: { fontSize: 22, fontWeight: '600', marginBottom: 8 },
-  filters: { width: '100%', paddingHorizontal: 8, maxHeight: 260 },
-  rowInput: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 8 },
-  input: { backgroundColor: '#fff', padding: 8, borderRadius: 6, marginVertical: 6, flex: 1 },
-  row: { flexDirection: 'row', padding: 12, backgroundColor: '#fff', marginVertical: 6, marginHorizontal: 8, borderRadius: 8, alignItems: 'center' },
-  rowTitle: { fontSize: 16, fontWeight: '600' },
-  rowSubtitle: { color: '#444' },
-  rowSmall: { color: '#666', fontSize: 12 },
-  editBtn: { backgroundColor: '#007AFF', padding: 8, borderRadius: 6 },
+  container: { flex: 1, paddingTop: 18, alignItems: 'center', backgroundColor: '#0b1220' },
+  header: { flexDirection: 'row', alignItems: 'center', marginBottom: 8, paddingHorizontal: 12, paddingVertical: 8, backgroundColor: 'transparent' },
+  headerBack: { padding: 6 },
+  backText: { color: '#06b6d4', fontSize: 16 },
+  title: { fontSize: 20, fontWeight: '600', marginBottom: 6, color: '#e6f6f8', textAlign: 'center' },
+  filters: { width: '100%', paddingHorizontal: 8, paddingBottom: 6 },
+  rowInput: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 4 },
+  input: {
+    backgroundColor: '#ffffff',
+    color: '#000000',
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    marginVertical: 6,
+    width: '48%',
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    fontSize: 13,
+    height: 40
+  },
+  row: { flexDirection: 'row', padding: 10, backgroundColor: '#0f172a', marginVertical: 6, marginHorizontal: 8, borderRadius: 10, alignItems: 'center' },
+  rowTitle: { fontSize: 15, fontWeight: '600', color: '#e6f6f8' },
+  rowSubtitle: { color: '#9fb7bd' },
+  rowSmall: { color: '#9fb7bd', fontSize: 12 },
+  editBtn: { backgroundColor: '#06b6d4', padding: 8, borderRadius: 6 },
   footer: { position: 'absolute', bottom: 10, left: 12, right: 12, flexDirection: 'row', justifyContent: 'space-between' },
-  backBtn: { backgroundColor: '#888', padding: 10, borderRadius: 6 },
-  status: { padding: 6, color: '#666' },
-  modalWrap: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' },
-  modalCard: { width: '92%', maxHeight: '90%', backgroundColor: '#fff', borderRadius: 8, padding: 12 },
-  modalTitle: { fontSize: 18, fontWeight: '700', marginBottom: 8 },
-  saveBtn: { backgroundColor: '#007AFF', padding: 10, borderRadius: 6 },
-  deleteBtn: { backgroundColor: '#D9534F', padding: 10, borderRadius: 6 },
-  cancelBtn: { backgroundColor: '#eee', padding: 10, borderRadius: 6 },
-  status: { padding: 6, color: '#666' }
+  backBtn: { backgroundColor: '#06b6d4', padding: 10, borderRadius: 6 },
+  status: { padding: 6, color: '#9fb7bd' },
+
+  // modal styles aligned with klub popup
+  modalContainer: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', padding: 16 },
+  modalContent: { backgroundColor: '#fff', borderRadius: 12, padding: 14, maxHeight: '90%' },
+  modalTitle: { fontSize: 18, fontWeight: '700', marginBottom: 8, color: '#062e35' },
+  modalButtons: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
+  button: { backgroundColor: '#06b6d4', padding: 10, borderRadius: 10, alignItems: 'center', marginRight: 8, flex: 1 },
+  buttonText: { color: '#062e35', fontWeight: '700' },
 });
